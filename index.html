@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>OuePaMal was here.</title>
+        <link rel ="stylesheet" href="style.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- <link rel="icon" href="favicon.ico" type="image/x-icon"> -->        
+    </head>
+    <body id="background">
+        <div class="topbar">
+            <div id="logo-container" class="box-style fade-up delay-0">
+                <img src="filesto/OPMlogo.png" alt="Logo" id="logo">
+            </div>
+            <div id="link-box" class="box-style fade-up delay-1">
+                <div id="projects-link"><a href="projects.html">
+                    <img src="filesto/ProjectsIcon.png">
+                    <p>Projets</p>
+                </a></div>
+                <div id="socials-link"><a href="socials.html">
+                    <img src="filesto/SocialsIcon.png">
+                    <p>Réseaux</p>
+                </a></div>
+            </div>
+        </div>
+        <div id="music-toggle" class="fade-up delay-2.7" role="button" aria-pressed="false" title="Pour la ptite ambiance ^^" tabindex="0">
+            <img src="filesto/MusicIco.png" alt="SUPRISE">
+        </div>
+        <div id="main-container" class="box-style fade-up delay-3">
+            <div id="content">
+                <p>Bienvenue sur mon portfolio! Ici tu peux retrouver mes projets actuels, mon blog, les liens vers mes réseaux sociaux (et mon github biensur!).<br> <i>Ce site a été fait avec mon petit cœur donc visite le de fond en comble ^^!</i></p>
+            </div>    
+        </div>
+        <div id="beautifulrat-img">
+        <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia.tenor.com%2F1Hxbhdjgp7cAAAAj%2Frat-dance.gif&f=1&nofb=1&ipt=8ea5043057385e16d525c27f13d79a2b0305867d7b29f58b91bf8744cb98e2c4" alt="PREASE FOR AMERICA">
+        </div>
+        <script>
+        (function(){
+            if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelectorAll('.fade-up').forEach(el=>el.classList.add('show'));
+                return;
+            }
+
+            const baseDelay = 220; 
+            const stagger = 180;
+            function triggerFadeUp(){
+                const items = [
+                    document.getElementById('logo-container'),
+                    document.getElementById('link-box'),
+                    document.getElementById('music-toggle'),
+                    document.getElementById('main-container')
+                ].filter(Boolean);
+                items.forEach((el, i) => {
+                    setTimeout(() => el.classList.add('show'), baseDelay + i * stagger);
+                });
+            }
+
+            if (document.readyState === 'complete') {
+                triggerFadeUp();
+            } else {
+                window.addEventListener('load', triggerFadeUp, { once: true });
+                setTimeout(() => {
+                    if (!document.querySelector('.fade-up.show')) triggerFadeUp();
+                }, 2000);
+            }
+        })();
+        </script>
+
+    </body>
+    <script>
+        (function(){
+            const main = document.getElementById('main-container');
+            if(!main) return;
+            function updateScrollbar(){
+                if(main.scrollHeight > main.clientHeight) main.classList.add('show-scrollbar');
+                else main.classList.remove('show-scrollbar');
+            }
+            updateScrollbar();
+            window.addEventListener('resize', updateScrollbar);
+            if (window.ResizeObserver) new ResizeObserver(updateScrollbar).observe(main);
+            const mo = new MutationObserver(updateScrollbar);
+            mo.observe(main, { childList: true, subtree: true, characterData: true });
+        })();
+    </script>
+    <script>
+        (function(){
+            const toggle = document.getElementById('music-toggle');
+            if(!toggle) return;
+            const img = toggle.querySelector('img');
+
+            const audioEl = document.createElement('audio');
+            audioEl.preload = 'auto';
+            audioEl.loop = false;
+            audioEl.style.display = 'none';
+
+            const sources = [
+                { src: 'filesto/music.mp3', type: 'audio/mpeg' },
+                { src: 'filesto/music.ogg', type: 'audio/ogg' }
+            ];
+
+            let supported = false;
+            for (const s of sources) {
+                try {
+                    if (!audioEl.canPlayType || audioEl.canPlayType(s.type)) {
+                        const src = document.createElement('source');
+                        src.src = s.src;
+                        src.type = s.type;
+                        audioEl.appendChild(src);
+                        supported = true;
+                    }
+                } catch (e) {
+                    console.error('Error checking audio support for', s.type, e);
+                }
+            }
+
+            document.body.appendChild(audioEl);
+
+            function showMusicError(msg){
+                let box = document.getElementById('music-error');
+                if(!box){
+                    box = document.createElement('div');
+                    box.id = 'music-error';
+                    box.textContent = msg;
+                    document.body.appendChild(box);
+                } else {
+                    box.textContent = msg;
+                }
+            }
+
+            function setPlaying(state){
+                toggle.classList.toggle('playing', state);
+                toggle.setAttribute('aria-pressed', state ? 'true' : 'false');
+                toggle.title = state ? 'Stop music' : 'Play music';
+            }
+
+            async function playAudio(){
+                if(!supported){
+                    showMusicError('Audio format not supported by this browser.');
+                    console.error('No supported audio sources found');
+                    return;
+                }
+                try{
+                    audioEl.muted = false;
+                    if (!audioEl.src && audioEl.querySelector('source')) audioEl.load();
+                    const p = audioEl.play();
+                    if(p && p.then) await p;
+                    console.log('Audio started');
+                    setPlaying(true);
+                }catch(e){
+                    console.error('Audio play failed:', e);
+                    showMusicError('Playback failed (see console for details).');
+                    setPlaying(false);
+                }
+            }
+
+            function stopAudio(){
+                try{ audioEl.pause(); audioEl.currentTime = 0; }catch(e){}
+                setPlaying(false);
+            }
+
+            toggle.addEventListener('click', () => {
+                console.log('Music toggle clicked. paused:', audioEl.paused);
+                if(audioEl.paused) playAudio();
+                else stopAudio();
+            });
+            toggle.addEventListener('keydown', (e) => {
+                if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle.click(); }
+            });
+
+            audioEl.addEventListener('ended', () => setPlaying(false));
+            audioEl.addEventListener('error', (ev) => {
+                const err = audioEl.error;
+                console.error('Audio element error:', err);
+                showMusicError('Audio playback error: code ' + (err && err.code));
+            });
+        })();
+    </script>
+</html>
