@@ -235,11 +235,76 @@
     line-height: 1.5;
 }
 
+.project-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.project-card-header h1 {
+    margin: 0;
+}
+
+.ptit-texte {
+    font-size: 15px;
+}
+
+.project-card-header img {
+    display: block;
+}
+
+.ftb {
+    display: block;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.ftb-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ftb-content p {
+    width: 100%;
+    text-align: center;
+}
+
 .project-card p {
     margin: 0;
 }
 
+.project-section {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.project-section-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.project-section-content > p {
+    margin-bottom: 8px;
+}
+
+.project-section-image {
+    display: block;
+    flex: 0 1 260px;
+    width: 260px;
+    max-width: 35%;
+    height: auto;
+    padding: 5px;
+    border: 3px solid #FFFFFF;
+    box-sizing: border-box;
+}
+
 @media (max-width: 760px) {
+    :root {
+        --top-offset: 180px;
+    }
+
     .topbar {
         left: 20px;
         right: 20px;
@@ -268,6 +333,20 @@
 
     .project-card {
         padding: 14px;
+    }
+
+    .project-section {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .project-section-image {
+        align-self: center;
+        flex: 0 0 auto;
+        width: min(100%, 160px);
+        max-width: 100%;
+        height: auto;
     }
 }
 
@@ -311,4 +390,41 @@
     width: 80px;
     height: auto;
     z-index: 100;
+}
+
+li.rainbow {
+    font-size: 25px;
+}
+
+.rainbow {
+  text-decoration: underline;
+  font-size: 32px;
+  font-family: monospace;
+  letter-spacing: 5px;
+  animation: colorRotate 6s linear 0s infinite;
+}
+
+.transition-line {
+    width: 90%;
+    height: 2px;
+    background-color: #ffffff;
+    margin: 0 auto;
+}
+
+@keyframes colorRotate {
+  from {
+    color: #6666ff;
+  }
+  10% {
+    color: #0099ff;
+  }
+  50% {
+    color: #00ff00;
+  }
+  75% {
+    color: #ff3399;
+  }
+  100% {
+    color: #6666ff;
+  }
 }
