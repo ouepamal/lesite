@@ -2,6 +2,151 @@
 :root {
     --top-offset: 120px;
 }
+
+html.page-transition-entering {
+    background: #000000;
+}
+
+html.page-transition-entering body {
+    background: #000000 !important;
+}
+
+html.page-transition-entering body > :not(.page-transition) {
+    visibility: hidden;
+}
+
+html.home-intro-active {
+    background: #000000;
+}
+
+html.home-intro-active body {
+    background: #000000 !important;
+}
+
+html.home-intro-active body > :not(.home-intro) {
+    visibility: hidden;
+}
+
+.home-intro {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: grid;
+    place-items: center;
+    background: #000000;
+    opacity: 1;
+}
+
+.home-intro__rat {
+    display: block;
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+    animation: home-intro-spin 900ms linear infinite;
+}
+
+.home-intro--leaving {
+    animation: home-intro-fade 450ms ease forwards;
+}
+
+@keyframes home-intro-spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes home-intro-fade {
+    to { opacity: 0; }
+}
+
+.page-transition {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: grid;
+    place-items: center;
+    background: #8a561a;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.page-transition--leaving {
+    pointer-events: all;
+    animation: page-transition-cover 350ms ease forwards;
+}
+
+.page-transition--entering {
+    pointer-events: all;
+    animation: page-transition-reveal 450ms ease forwards;
+}
+
+.page-transition__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.page-transition__brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.page-transition__brand img {
+    display: block;
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
+.page-transition__track {
+    width: min(240px, 65vw);
+    height: 4px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.page-transition__bar {
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    transform: scaleX(0);
+    transform-origin: left center;
+}
+
+.page-transition--leaving .page-transition__bar {
+    animation: page-transition-load 750ms linear forwards;
+}
+
+.page-transition--entering .page-transition__bar {
+    transform: scaleX(1);
+}
+
+@keyframes page-transition-cover {
+    to { opacity: 1; }
+}
+
+@keyframes page-transition-reveal {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@keyframes page-transition-load {
+    to { transform: scaleX(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .page-transition {
+        display: none;
+    }
+
+    .home-intro__rat {
+        animation: none;
+    }
+}
+
 #background {
     display: flex;
     justify-content: center;
@@ -265,6 +410,14 @@
     align-items: center;
 }
 
+.socials-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
 .ftb-content p {
     width: 100%;
     text-align: center;
@@ -298,6 +451,63 @@
     padding: 5px;
     border: 3px solid #FFFFFF;
     box-sizing: border-box;
+}
+
+.socials-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+}
+
+.socials-section-content {
+    flex: 0 1 auto;
+    min-width: 0;
+    color: #FFFFFF;
+    text-align: center;
+}
+
+.socials-section-content > p {
+    margin-bottom: 8px;
+}
+
+.socials-section-image {
+    display: block;
+    flex: 0 1 260px;
+    width: 260px;
+    max-width: 35%;
+    height: auto;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 24px 32px;
+    margin-top: 20px;
+}
+
+.social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+.social-link svg {
+    display: block;
+    width: 32px;
+    height: 32px;
+    flex: 0 0 32px;
+    fill: currentColor;
+}
+
+.social-link p {
+    margin: 0;
 }
 
 @media (max-width: 760px) {
@@ -341,7 +551,21 @@
         gap: 12px;
     }
 
+    .socials-section {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
     .project-section-image {
+        align-self: center;
+        flex: 0 0 auto;
+        width: min(100%, 160px);
+        max-width: 100%;
+        height: auto;
+    }
+
+    .socials-section-image {
         align-self: center;
         flex: 0 0 auto;
         width: min(100%, 160px);
